@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Services\UserService;
 use App\Http\Requests\StoreUserRequest;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use Exception;
 
 class PacienteController extends Controller
 {
@@ -33,10 +35,9 @@ class PacienteController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(StoreUserRequest $request)
-    {        
-        $attr = $request->only(['name', 'cpf', 'idade', 'sexo_id', 'email', 'password']);
-        dd($attr);
-        $user = $this->userService->store($request->toArray());
+    {
+        $atributos = $request->validated();
+        $user = $this->userService->store($atributos);
 
         try {
             $token = JWTAuth::fromUser($user);
@@ -44,7 +45,10 @@ class PacienteController extends Controller
             return response()->json(['error' => 'Algo inesperado aconteceu, por favor entre em contato com o suporte!'], 500);
         }
 
-        return response()->json(['token' => $token], 201);
+        return response()->json([
+            'mensagem' => 'Usuário criado com sucesso - ID: ' . $user->id,
+            'token' => $token
+        ], 201);
     }
 
     /**
@@ -56,12 +60,12 @@ class PacienteController extends Controller
             $user = $this->userService->find($id);
             
             if (!$user) {
-                throw new Exception("Usuario nao encontrado");
+                throw new Exception("Usuário não encontrado.");
             }
 
-            return $user;
+            return response()->json($user->toArray(), 200);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Nao foi possivel encontrar o usuario!'], 404);
+            return response()->json(['mensagem' => $e->getMessage()], 404);
         }
     }
 
@@ -87,5 +91,10 @@ class PacienteController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function me() {
+        $user = JWTAuth::parseToken()->authenticate();
+        return response()->json($user->toArray(), 200);
     }
 }

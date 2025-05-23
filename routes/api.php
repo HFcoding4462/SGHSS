@@ -12,7 +12,8 @@ Route::get('/logout', [AuthController::class, 'logout']);
 
 Route::post('/paciente', [PacienteController::class, 'store']);
 
-Route::middleware('auth:api')->group(function() {
-    Route::get('/pacientes', [PacienteController::class, 'index']);
-    Route::get('/paciente/{id}', [PacienteController::class, 'show']);
+Route::middleware('auth:api')->prefix('paciente')->group(function() {
+    Route::get('/', [PacienteController::class, 'index']);
+    Route::get('/me', [PacienteController::class, 'me']);
+    Route::get('/{id}', [PacienteController::class, 'show']);
 });

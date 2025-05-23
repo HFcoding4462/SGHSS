@@ -35,6 +35,10 @@ class User extends Authenticatable implements JWTSubject
     protected $hidden = [
         'password',
         'remember_token',
+        'created_at',
+        'updated_at',
+        'role_id',
+        'email_verified_at',
     ];
 
     /**
@@ -48,6 +52,10 @@ class User extends Authenticatable implements JWTSubject
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function sexo() {
+        return $this->belongsTo(Sexo::class, 'sexo_id', 'id')->get();
     }
 
     public function getJWTIdentifier()

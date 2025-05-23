@@ -12,10 +12,15 @@ class UserService {
 		$this->userRepository = new UserRepository();
 	}
 
+	public function find(int $id) {
+		$user = $this->userRepository->find($id);
+		return $user;
+	}
+
 	public function store($attr) {
 		$user = $this->userRepository->store($attr);
 
-		//event(UserCreated);
+		//event();
 		return $user;
 	}
 }

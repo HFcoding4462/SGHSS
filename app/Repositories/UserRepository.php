@@ -10,7 +10,7 @@ class UserRepository {
 		return User::find($id);
 	}
 
-	public function store($attr) {
-		return User::create($attr);
+	public function store($atributos) {
+		return User::create($atributos);
 	}
 }
