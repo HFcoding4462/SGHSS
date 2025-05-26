@@ -33,7 +33,7 @@ class MedicoService {
 		return $medico;
 	}
 
-	public function update($medico, $atributos) {
+	public function update(User $medico, $atributos) {
 		if (!isset($atributos['role_id']) || $atributos['role_id'] != UserRole::MEDICO) {
 			$atributos['role_id'] = UserRole::MEDICO;
 		}
@@ -42,14 +42,25 @@ class MedicoService {
 		return $medicoAtualizado;
 	}
 
-	public function destroy($medico) {
+	public function destroy(User $medico) {
 		$this->medicoRepository->destroy($medico);
 		return true;
 	}
 
-	public function consultas($medico) {
-		$consultas = $this->medicoRepository->consultas($medico);
+	public function getConsultas(User $medico) {
+		$consultas = $this->medicoRepository->getConsultas($medico);
 		return $consultas;
+	}
+
+	public function getPacientes(User $medico) {
+		$consultas = $this->getConsultas($medico);
+		$pacientes = $consultas->pluck('paciente');
+
+		if ($pacientes) {
+			return $pacientes->unique();
+		}
+
+		return collect();
 	}
 
 	public function me() {

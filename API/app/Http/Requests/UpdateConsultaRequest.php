@@ -26,7 +26,13 @@ class UpdateConsultaRequest extends FormRequest
         $consulta = $this->route('consulta');
 
         $validations = [
-            "medico_id" => "sometimes|integer|exists:users,id",
+            "medico_id" => [
+                "sometimes", "integer",
+                Rule::exists('users', 'id')
+                    ->where('role_id', UserRole::MEDICO)
+                    ->whereNull('deleted_at')
+            ],
+
             "data" => [
                 'sometimes', 'date',
                 Rule::unique('consultas', 'data')
@@ -36,7 +42,7 @@ class UpdateConsultaRequest extends FormRequest
         ];
 
         if ($user->role_id == UserRole::ADMINISTRADOR) {
-            $validations["paciente_id"] = "sometimes|inteer|exists:users,id";
+            $validations["paciente_id"] = "sometimes|integer|exists:users,id";
             $validations["resultado"] = "sometimes|string";
         } else if ($user->role_id == UserRole::MEDICO) {
             $validations["resultado"] = "required|string";
@@ -50,7 +56,7 @@ class UpdateConsultaRequest extends FormRequest
             "required" => "Campo :attribute obrigatorio",
             "integer" => "Campo :attribute inválido",
             "exists" => "Campo :attribute inválido",
-            "date" => "Data inválida",
+            "data" => "Data inválida - Formato MM/DD/YYYY",
             "data.unique" => "Data indisponivel"
         ];
     }

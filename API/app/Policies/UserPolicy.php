@@ -5,9 +5,31 @@ namespace App\Policies;
 use App\Models\User;
 use App\Models\UserRole;
 use Illuminate\Auth\Access\Response;
+use App\Services\MedicoService;
 
 class UserPolicy
 {
+    public function view(User $user, User $model): bool {
+        $medicoService = new MedicoService;
+
+        switch($user->role_id) {
+            case UserRole::ADMINISTRADOR:
+                return true;
+                break;
+                
+            case UserRole::MEDICO:
+                $pacientes = $medicoService->getPacientes($user);
+                return (bool) $pacientes->firstWhere('id', $model->id);
+                break;
+
+            case UserRole::PACIENTE:
+                return $user->id == $model->id;
+                break;
+        }
+
+        return false;
+    }
+
    /**
      * Determine whether the user can update the model.
      */

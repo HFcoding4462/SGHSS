@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Models\UserRole;
+use Illuminate\Validation\Rule;
 
 class StoreConsultaRequest extends FormRequest
 {
@@ -20,8 +21,14 @@ class StoreConsultaRequest extends FormRequest
     public function rules(): array
     {
         $user = Auth::user();
+
         $validations = [
-            "medico_id" => "required|integer|exists:users,id",
+            "medico_id" => [
+                "required", "integer",
+                Rule::exists('users', 'id')
+                    ->where('role_id', UserRole::MEDICO)
+                    ->whereNull('deleted_at')
+            ],
             "data" => "required|date|unique:consultas,data,NULL,NULL,deleted_at,NULL"
         ];
 
@@ -36,8 +43,9 @@ class StoreConsultaRequest extends FormRequest
         return [
             "required" => "Campo :attribute obrigatorio",
             "integer" => "Campo :attribute inválido",
+            "medico_id.exists" => "Médico inválido",
             "exists" => "Campo :attribute inválido",
-            "date" => "Data inválida",
+            "data" => "Data inválida - Formato MM/DD/YYYY",
             "data.unique" => "Data indisponivel"
         ];
     }

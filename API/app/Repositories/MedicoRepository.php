@@ -58,7 +58,7 @@ class MedicoRepository {
 		return true;
 	}
 
-	public function consultas(User $medico) {
+	public function getConsultas(User $medico) {
 		return $medico->consultas->load('paciente');
 	}
 }

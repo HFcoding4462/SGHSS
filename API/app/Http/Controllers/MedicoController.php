@@ -36,7 +36,6 @@ class MedicoController extends Controller
      */
     public function store(StoreMedicoRequest $request)
     {
- 
         $atributos = $request->validated();
         $user = $this->medicoService->store($atributos);
         $token = JWTAuth::fromUser($user);
@@ -51,7 +50,7 @@ class MedicoController extends Controller
      * Display the specified resource.
      */
     public function show(User $medico)
-    {        
+    {
         if (!$medico) {
             return response()->json(['mensagem' => 'Medico nao encontrado'], 404);
         }

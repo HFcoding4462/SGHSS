@@ -31,10 +31,10 @@ class ConsultaService {
 				$consultas = $this->consultaRepository->all();
 				break;
 			case UserRole::MEDICO:
-				$consultas = $this->medicoService->consultas($user);
+				$consultas = $this->medicoService->getConsultas($user);
 				break;
 			case UserRole::PACIENTE:
-				$consultas = $this->pacienteService->consultas($user);
+				$consultas = $this->pacienteService->getConsultas($user);
 				break;
 		}
 

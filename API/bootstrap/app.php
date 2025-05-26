@@ -23,20 +23,19 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->render(function(AccessDeniedHttpException $exception, Request $request) {
-            return response()->json(['mensagem' => 'Acao nao autorizada'], 403);
+            return response()->json(['mensagem' => 'Não autorizado'], 403);
         });
 
         $exceptions->render(function(AuthenticationException $exception, Request $request) {
-            return response()->json(['mensagem' => 'Nao autenticado - Token Invalido'], 403);
+            return response()->json(['mensagem' => 'Não autenticado - token inválido'], 403);
         });
 
         $exceptions->render(function(NotFoundHttpException $exception, Request $request) {
-            return response()->json(['mensagem' => 'Nao encontrado'], 404);
+            return response()->json(['mensagem' => 'Não encontrado'], 404);
         });
 
         $exceptions->render(function(ValidationException $exception, Request $request) {
             return response()->json($exception->errors(), 422);
-            //return response()->json($exception->messages(), 404);
         });
 
         $exceptions->render(function(Exception $exception, Request $request) {

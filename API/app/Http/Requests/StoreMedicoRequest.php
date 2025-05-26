@@ -5,12 +5,19 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Models\UserRole;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class StoreMedicoRequest extends FormRequest
 {
     public function authorize(): bool {
         $user = Auth::user();
-        return $user->role_id == UserRole::ADMINISTRADOR;
+        //return $user->role_id == UserRole::ADMINISTRADOR;
+
+        if ($user->role_id != UserRole::ADMINISTRADOR) {
+            throw new AccessDeniedHttpException();
+        }
+
+        return true;
     }
     /**
      * Get the validation rules that apply to the request.

@@ -9,9 +9,11 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 class PacienteService {
 	protected $PacienteRepository;
+	protected $medicoService;
 
 	public function __construct() {
 		$this->pacienteRepository = new PacienteRepository();
+		$this->medicoService = new MedicoService();
 	}
 
 	public function all() {
@@ -24,7 +26,7 @@ class PacienteService {
 				$pacientes = $this->pacienteRepository->all();
 				break;
 			case UserRole::MEDICO:
-				$pacientes = collect(); //medicoRepository
+				$pacientes = $this->medicoService->getPacientes($user); //medicoRepository
 				break;
 			case UserRole::PACIENTE:
 				$pacientes = $user;
@@ -58,11 +60,11 @@ class PacienteService {
 	}
 
 	public function destroy(User $paciente) {
-		return $this->pacienteRepository->destroy($paciete);
+		return $this->pacienteRepository->destroy($paciente);
 	}
 
-	public function consultas(User $paciente) {
-		$consultas = $this->pacienteRepository->consultas($paciente);
+	public function getConsultas(User $paciente) {
+		$consultas = $this->pacienteRepository->getConsultas($paciente);
 		return $consultas;
 	}
 

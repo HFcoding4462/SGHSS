@@ -40,7 +40,7 @@ class PacienteRepository {
 		return true;
 	}
 
-	public function consultas(User $paciente) {
+	public function getConsultas(User $paciente) {
 		$consultas = $paciente->consultas->load('medico.crm');
 		return $consultas;
 	}

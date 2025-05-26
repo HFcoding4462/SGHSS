@@ -17,7 +17,7 @@ class JWTMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         try {
-            JWTAuth::parseToken()->authenticate();
+            $user = JWTAuth::parseToken()->authenticate();
         } catch (Exception $e) {
             die();
         }

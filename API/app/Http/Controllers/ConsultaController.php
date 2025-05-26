@@ -51,7 +51,7 @@ class ConsultaController extends Controller
             return response()->json(['mensagem' => 'Consulta nao encontrada'], 404);
         }
 
-        return response()->json($consulta->toArray(), 200);
+        return response()->json($consulta->load('paciente', 'medico.crm')->toArray(), 200);
     }
 
     /**

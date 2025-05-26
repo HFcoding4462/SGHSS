@@ -7,6 +7,7 @@ use App\Services\PacienteService;
 use App\Http\Requests\StorePacienteRequest;
 use App\Http\Requests\UpdatePacienteRequest;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Exception;
 use App\Models\User;
 
@@ -52,6 +53,12 @@ class PacienteController extends Controller
      */
     public function show(User $paciente)
     {
+        $user = JWTAuth::parseToken()->authenticate();
+        
+        if ($user->cannot('view', $paciente)) {
+            throw new AccessDeniedHttpException();
+        }
+
         if (!$paciente) {
             return response()->json(['mensagem' => 'Paciente nao encontrado'], 404);
         }
@@ -76,7 +83,9 @@ class PacienteController extends Controller
     public function destroy(User $paciente)
     {
         $user = JWTAuth::parseToken()->authenticate();
-        $user->can('delete', $paciente);
+        if ($user->cannot('delete', $paciente)) {
+            throw new AccessDeniedHttpException();
+        }
 
         $this->pacienteService->destroy($paciente);
         return response()->json([], 200);
