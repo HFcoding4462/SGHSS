@@ -1,14 +1,14 @@
 {
 	"info": {
-		"_postman_id": "d952ebd9-63e3-4e89-89ca-e1547952afc3",
+		"_postman_id": "aaa442f4-6959-460d-8c7e-8fa52432b508",
 		"name": "SGHSS",
 		"description": "Collection feita para testar o sistema back-end SGHSS (trabalho final de Analise e Desenvolvimento de Sistemas - UNINTER).",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "45280184"
+		"_exporter_id": "39096747"
 	},
 	"item": [
 		{
-			"name": "Login",
+			"name": "Login - PACIENTE",
 			"event": [
 				{
 					"listen": "test",
@@ -16,7 +16,10 @@
 						"exec": [
 							"const json = pm.response.json();",
 							"const token = json.token;",
-							"pm.environment.set(\"jwt_token\", token);"
+							"",
+							"if (token) {",
+							"    pm.collectionVariables.set(\"jwt_token\", token);",
+							"}"
 						],
 						"type": "text/javascript",
 						"packages": {}
@@ -59,6 +62,60 @@
 			"response": []
 		},
 		{
+			"name": "Login - MÉDICO",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const json = pm.response.json();",
+							"const token = json.token;",
+							"",
+							"if (token) {",
+							"    pm.collectionVariables.set(\"jwt_token\", token);",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"medico@company.me\",\n    \"password\": \"medico\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{sghss_url}}/login",
+					"host": [
+						"{{sghss_url}}"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "PACIENTE - CADASTRAR",
 			"event": [
 				{
@@ -67,7 +124,10 @@
 						"exec": [
 							"const json = pm.response.json();",
 							"const token = json.token;",
-							"pm.environment.set(\"jwt_token\", token);"
+							"",
+							"if (token) {",
+							"    pm.collectionVariables.set(\"jwt_token\", token);",
+							"}"
 						],
 						"type": "text/javascript",
 						"packages": {}
@@ -100,7 +160,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\": \"paciente\",\n    \"cpf\": \"111.999.999-00\",\n    \"idade\": 20,\n    \"sexo_id\": 3,\n    \"email\": \"paciente@company.me\",\n    \"password\": \"paciente\"\n}"
+					"raw": "{\n    \"name\": \"paciente2\",\n    \"cpf\": \"992.999.999-00\",\n    \"idade\": 20,\n    \"sexo_id\": 3,\n    \"email\": \"paciente2@company.me\",\n    \"password\": \"paciente\"\n}"
 				},
 				"url": {
 					"raw": "{{sghss_url}}/paciente",
@@ -205,7 +265,7 @@
 			"response": []
 		},
 		{
-			"name": "(IMPROVE) VISUALIZAR PACIENTE POR ID",
+			"name": "VISUALIZAR PACIENTE POR ID",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -238,12 +298,13 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "{{sghss_url}}/pacientes",
+					"raw": "{{sghss_url}}/paciente/6",
 					"host": [
 						"{{sghss_url}}"
 					],
 					"path": [
-						"pacientes"
+						"paciente",
+						"6"
 					]
 				}
 			},
@@ -293,7 +354,67 @@
 			"response": []
 		},
 		{
+			"name": "PACIENTE - DELETAR",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"medico_id\": 3,\n    \"data\": \"05/25/2025\"\n}"
+				},
+				"url": {
+					"raw": "{{sghss_url}}/paciente/5",
+					"host": [
+						"{{sghss_url}}"
+					],
+					"path": [
+						"paciente",
+						"5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "MEDICO - CADASTRAR",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const json = pm.response.json();\r",
+							"const token = json.token;\r",
+							"\r",
+							"if (token) {\r",
+							"    pm.collectionVariables.set(\"jwt_token\", token);\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -320,7 +441,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\": \"medico123\",\n    \"cpf\": \"321.999.999-99\",\n    \"idade\": 19,\n    \"sexo_id\": 3,\n    \"email\": \"medico@company.me\",\n    \"password\": \"medico123\",\n    \"crm\": \"1234/AD\"\n}"
+					"raw": "{\n    \"name\": \"medico\",\n    \"cpf\": \"111.999.999-99\",\n    \"idade\": 35,\n    \"sexo_id\": 3,\n    \"email\": \"medico@company.me\",\n    \"password\": \"medico\",\n    \"crm\": \"1234/AD\"\n}"
 				},
 				"url": {
 					"raw": "{{sghss_url}}/medico",
@@ -425,50 +546,7 @@
 			"response": []
 		},
 		{
-			"name": "MEDICO - DELETAR",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{jwt_token}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "DELETE",
-				"header": [
-					{
-						"key": "Accept",
-						"value": "application/json",
-						"type": "text"
-					},
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"medico_id\": 3,\n    \"data\": \"05/25/2025\"\n}"
-				},
-				"url": {
-					"raw": "{{sghss_url}}/medico/3",
-					"host": [
-						"{{sghss_url}}"
-					],
-					"path": [
-						"medico",
-						"3"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "(IMPROVE - USER ID) VISUALIZAR MEDICO POR ID",
+			"name": "VISUALIZAR MEDICO POR ID",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -541,6 +619,49 @@
 				"body": {
 					"mode": "raw",
 					"raw": "{\n    \"name\": \"medico11\",\n    \"crm\": \"12345/AP\"\n}"
+				},
+				"url": {
+					"raw": "{{sghss_url}}/medico/3",
+					"host": [
+						"{{sghss_url}}"
+					],
+					"path": [
+						"medico",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "MEDICO - DELETAR",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"medico_id\": 3,\n    \"data\": \"05/25/2025\"\n}"
 				},
 				"url": {
 					"raw": "{{sghss_url}}/medico/3",
@@ -674,7 +795,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"medico_id\": 3,\n    \"data\": \"05/25/2025\"\n}"
+					"raw": "{\n    \"medico_id\": 6,\n    \"data\": \"22/22/2025\"\n}"
 				},
 				"url": {
 					"raw": "{{sghss_url}}/consulta",
@@ -795,6 +916,18 @@
 					""
 				]
 			}
+		}
+	],
+	"variable": [
+		{
+			"key": "sghss_url",
+			"value": "http://127.0.0.1:8000/api",
+			"type": "string"
+		},
+		{
+			"key": "jwt_token",
+			"value": "",
+			"type": "string"
 		}
 	]
 }
