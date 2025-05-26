@@ -23,3 +23,5 @@ yarn-error.log
 /.zed
 .gitignore
 .gitattributes
+API/vendor/*
+/API/vendor/*
