@@ -19,7 +19,7 @@ class JWTMiddleware
         try {
             JWTAuth::parseToken()->authenticate();
         } catch (Exception $e) {
-            return response()->json(['error' => 'Invalid token!'], 401);
+            die();
         }
 
         return $next($request);
