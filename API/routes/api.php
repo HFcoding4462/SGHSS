@@ -39,3 +39,12 @@ Route::middleware('auth:api')->prefix('consulta')->group(function() {
     Route::put('/{consulta}', [ConsultaController::class, 'update']);
     Route::delete('/{consulta}', [ConsultaController::class, 'destroy']);
 });
+
+
+Route::middleware('auth:api')->get('/administradores', [AdminController::class, 'index']);
+Route::middleware('auth:api')->prefix('administrador')->group(function() {
+    Route::post('/', [AdminController::class, 'store']);
+    Route::put('/{admin}', [AdminController::class, 'update']);
+    Route::get('/{admin}', [AdminController::class, 'show']);
+    Route::delete('/{admin}', [AdminController::class, 'destroy']);
+});
