@@ -64,7 +64,6 @@ class ConsultaService {
 
 	public function update(Consulta $consulta, $atributos) {
 		$user = Auth::user();
-		$medico = $this->medicoService->find($atributos['medico_id']);
 
 		if (!isset($atributos['paciente_id']) && $user->role_id == UserRole::PACIENTE) {
 			$atributos['paciente_id'] = $user->id;

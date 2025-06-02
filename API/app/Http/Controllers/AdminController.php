@@ -10,6 +10,7 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Exception;
 use App\Models\User;
+use App\Models\UserRole;
 
 class AdminController extends Controller
 {
@@ -23,6 +24,12 @@ class AdminController extends Controller
      */
     public function index()
     {
+        $user = JWTAuth::parseToken()->authenticate();
+
+        if ($user->role_id != UserRole::ADMINISTRADOR) {
+            throw new AccessDeniedHttpException();
+        }
+
         $admins = $this->adminService->all();
 
         if (!$admins) {

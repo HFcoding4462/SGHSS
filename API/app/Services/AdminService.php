@@ -6,6 +6,7 @@ use App\Repositories\AdminRepository;
 use App\Models\User;
 use App\Models\UserRole;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class AdminService {
 	protected $adminRepository;
@@ -37,6 +38,10 @@ class AdminService {
 	}
 
 	public function destroy(User $admin) {
+		if ($admin->role_id != UserRole::ADMINISTRADOR) {
+			throw new NotFoundHttpException();
+		}
+
 		return $this->adminRepository->destroy($admin);
 	}
 

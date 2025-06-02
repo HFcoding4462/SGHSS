@@ -10,6 +10,7 @@ use App\Http\Requests\StoreMedicoRequest;
 use App\Http\Requests\UpdateMedicoRequest;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Exception;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class MedicoController extends Controller
 {
@@ -75,7 +76,10 @@ class MedicoController extends Controller
     public function destroy(User $medico)
     {
         $user = JWTAuth::parseToken()->authenticate();
-        $user->can('delete', $medico);
+        
+        if ($user->cannot('delete', $medico)) {
+            throw new AccessDeniedHttpException();
+        }
 
         $this->medicoService->destroy($medico);
         return response()->json([], 200);

@@ -5,10 +5,17 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Models\UserRole;
+use App\Services\AdminService;
 
 class StoreAdminRequest extends FormRequest
 {
     public function authorize(): bool {
+        $adminCount = (new AdminService)->all()->count();
+
+        if ($adminCount == 0) {
+            return true;
+        }
+
         $user = Auth::user();
         return $user->role_id == UserRole::ADMINISTRADOR;
     }
